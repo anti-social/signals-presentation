@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Signals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/css/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/css/theme/night.min.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/lib/css/zenburn.css">
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+	<section data-markdown>
+	  <script type="text/template">
+	    # Signals
+	  </script>
+	</section>
+	<section data-markdown>
+	  <script type="text/template">
+	    ## Для чего нужны сигналы?
+	    - Реакция на некоторые события (Ctrl-C)
+	    - Межпроцессное взаимодействие (лучше использовать каналы)
+	  </script>
+	</section>
+	<section data-markdown>
+	  <script type="text/template">
+	    ## Действия по умолчанию
+	    - Завершение процесса
+	    - Игнорирование
+	    - Снимок образа процесса
+	    - Остановка
+	  </script>
+	</section>
+	<section data-markdown>
+	  <script type="text/template">
+	    ## Сигналы управляющего терминала
+	    - Посылаются группе процессов
+	    - SIGINT (Ctrl-C)
+	    - SIGQUIT (Ctrl-\\)
+	    - SIGTSTP (Ctrl-Z)
+	    - SIGCONT
+	    - SIGTTIN (фоновое чтение из tty)
+	    - SIGTTOU (фоновая запись в tty)
+	    - SIGHUP (отсоединение от терминала)
+	  </script>
+	</section>
+	<section data-markdown>
+	  <script type="text/template">
+	    ## Еще сигналы
+	    - SIGKILL (неблокируемый)
+	    - SIGSTOP (неблокируемый)
+	    - SIGTERM
+	    - SIGCHLD (что-то произошло с дочерним процессом)
+	    - SIGUSR1, SIGUSR2
+	  </script>
+	</section>
+	<section data-markdown>
+	  <script type="text/template">
+	    ## Асинхронные обработчики
+	    Что нельзя:
+	    - Нельзя использовать локи
+	    - Как следствие нельзя использовать malloc, printf и многие другие системные функции
+
+	    Что можно:
+	    - Установить atomic переменную
+	    - Вызвать AS-Safe функцию
+	  </script>
+	</section>
+	<section data-markdown>
+	  <script type="text/template">
+	    ## Signal
+	    <pre><code data-trim data-noescape class="C">
+typedef void (*sighandler_t)(int);
+
+sighandler_t signal(int signum, sighandler_t handler);
+	    </code></pre>
+
+	    Может быть вызвана со специальными константами: SIG_IGN & SIG_DFL.
+	    После обработки сигнала обработчик может либо остаться (BSD, GNU/Linux),
+	    либо может установиться обработчик по умолчанию (Solaris).
+	    POSIX предоставляет также bsd_signal (deprecated).
+	    
+	  </script>
+	</section>
+	<section>
+	  ## Sigaction
+	  <script type="text/template">
+	  </script>
+	</section>
+	<section data-markdown>
+	  ## Sigprocmask
+	  <script type="text/template">
+	  </script>
+	</section>
+	<section data-markdown>
+	  ## Sigwait, Sigtimedwait
+	  <script type="text/template">
+	  </script>
+	</section>
+	<section data-markdown>
+	  ## EINTR & SA_RESTART
+	  <script type="text/template">
+	  </script>
+	</section>
+	<section data-markdown>
+	  ## Waitpid
+	  <script type="text/template">
+	  </script>
+	</section>
+	<section data-markdown>
+	  ## Fork & Exec
+	  <script type="text/template">
+	  </script>
+	</section>
+	<section data-markdown>
+	  ## Init & сигналы
+	  <script type="text/template">
+	  </script>
+	</section>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/lib/js/head.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/js/reveal.min.js"></script>
+    <script>
+      Reveal.initialize({
+	dependencies: [
+	  // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+	  {
+	    src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/lib/js/classList.js',
+	    condition: function() { return !document.body.classList; }
+	  },
+
+	  // Interpret Markdown in <section> elements
+	  {
+	    src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/plugin/markdown/marked.js',
+	    condition: function() { return !!document.querySelector( '[data-markdown]' ); }
+	  },
+          {
+	    src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/plugin/markdown/markdown.js',
+	    condition: function() { return !!document.querySelector( '[data-markdown]' ); }
+	  },
+
+          // Syntax highlight for <code> elements
+          {
+	    src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/plugin/highlight/highlight.js',
+	    async: true,
+	    callback: function() { hljs.initHighlightingOnLoad(); }
+	  },
+
+	  // Speaker notes
+          {
+	    src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/plugin/notes/notes.js',
+	    async: true
+	  },
+	]
+      });
+    </script>
+  </body>
+</html>
